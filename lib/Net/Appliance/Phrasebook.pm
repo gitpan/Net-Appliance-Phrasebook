@@ -4,7 +4,7 @@ use strict;
 use warnings FATAL => qw(all);
 
 use base qw(Class::Data::Inheritable);
-our $VERSION = 0.05;
+our $VERSION = 0.06;
 
 use Data::Phrasebook;
 use List::Util qw(first);
@@ -86,8 +86,7 @@ Net::Appliance::Phrasebook - Network appliance command-line phrasebook
 
 =head1 VERSION
 
-This document refers to version 0.05 of C<Net::Appliance::Phrasebook>,
-released Monday Oct 02, 2006.
+This document refers to version 0.06 of C<Net::Appliance::Phrasebook>.
 
 =head1 SYNOPSIS
 
@@ -122,9 +121,7 @@ the remote management of network appliances.
 
 =head1 METHODS
 
-=over 4
-
-=item C<new>
+=head2 C<new>
 
 This method accepts a list of named arguments (associative array).
 
@@ -138,18 +135,16 @@ C<source>.
 
 The C<new> constructor returns a query object, or C<undef> on failure.
 
-=item C<load>
+=head2 C<load>
 
 This is an alias for the C<new()> constructor should you prefer to use it.
 
-=item C<fetch>
+=head2 C<fetch>
 
 Pass this method a single keyword, and it will return the corresponding value
 from the dictionary. It will die on lookup failure, because that's what
 L<Data::Phrasebook> does when there is no successful hit for the given keyword
 in available dictionaries.
-
-=back
 
 =head1 SUPPORTED SYSTEMS
 
@@ -167,36 +162,32 @@ and then the C<PIXOS> dictionary, before failing.
 Below is the list of built-in dictionaries, and of course you are able to
 supply your own via the C<new> object method and an external file.
 
-=over 4
-
-=item C<IOS>
+=head2 C<IOS>
 
  err_str : regular expression for error messages from the device
  paging  : the command used on Cisco IOS to control page length
  prompt  : a regular expression for Cisco IOS platform CLI prompts
 
-=item C<Aironet>
+=head2 C<Aironet>
 
 This is currently a synonym for C<IOS>.
 
-=item C<PIXOS>
+=head2 C<PIXOS>
 
  err_str : regular expression for error messages from the device
  paging : the command used on Cisco PIXOS to control page length
  prompt : a regular expression for Cisco PIXOS platform CLI prompts
 
-=item C<FWSM>
+=head2 C<FWSM>
 
 This is currently a synonym for C<PIXOS>.
 
-=item C<FWSM3>
+=head2 C<FWSM3>
 
 This is currently a synonym for C<PIXOS>, apart from...
 
  paging : the command used on Cisco FWSM running software version
           of 3.x or later to control page length
-
-=back
 
 =head1 CUSTOM PHRASEBOOKS
 

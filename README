@@ -2,8 +2,7 @@ NAME
     Net::Appliance::Phrasebook - Network appliance command-line phrasebook
 
 VERSION
-    This document refers to version 0.05 of "Net::Appliance::Phrasebook",
-    released Monday Oct 02, 2006.
+    This document refers to version 0.06 of "Net::Appliance::Phrasebook".
 
 SYNOPSIS
      use Net::Appliance::Phrasebook;
@@ -35,29 +34,28 @@ TERMINOLOGY
     related data, that help in the remote management of network appliances.
 
 METHODS
-    "new"
-        This method accepts a list of named arguments (associative array).
+  "new"
+    This method accepts a list of named arguments (associative array).
 
-        There is one required named argument, which is the class of device
-        whose dictionary you wish to access. The named argument is called
-        "platform".
+    There is one required named argument, which is the class of device whose
+    dictionary you wish to access. The named argument is called "platform".
 
-        One further, optional argument to "new" is the filename of a
-        phrasebook. If this is not provided, "Net::Appliance::Phrasebook"
-        will use its own internal phrasebook (see "SUPPORTED SYSTEMS"). This
-        named argument is called "source".
+    One further, optional argument to "new" is the filename of a phrasebook.
+    If this is not provided, "Net::Appliance::Phrasebook" will use its own
+    internal phrasebook (see "SUPPORTED SYSTEMS"). This named argument is
+    called "source".
 
-        The "new" constructor returns a query object, or "undef" on failure.
+    The "new" constructor returns a query object, or "undef" on failure.
 
-    "load"
-        This is an alias for the "new()" constructor should you prefer to
-        use it.
+  "load"
+    This is an alias for the "new()" constructor should you prefer to use
+    it.
 
-    "fetch"
-        Pass this method a single keyword, and it will return the
-        corresponding value from the dictionary. It will die on lookup
-        failure, because that's what Data::Phrasebook does when there is no
-        successful hit for the given keyword in available dictionaries.
+  "fetch"
+    Pass this method a single keyword, and it will return the corresponding
+    value from the dictionary. It will die on lookup failure, because that's
+    what Data::Phrasebook does when there is no successful hit for the given
+    keyword in available dictionaries.
 
 SUPPORTED SYSTEMS
     You can select the *platform* that most closely reflects your device.
@@ -74,27 +72,27 @@ SUPPORTED SYSTEMS
     Below is the list of built-in dictionaries, and of course you are able
     to supply your own via the "new" object method and an external file.
 
-    "IOS"
-         err_str : regular expression for error messages from the device
-         paging  : the command used on Cisco IOS to control page length
-         prompt  : a regular expression for Cisco IOS platform CLI prompts
+  "IOS"
+     err_str : regular expression for error messages from the device
+     paging  : the command used on Cisco IOS to control page length
+     prompt  : a regular expression for Cisco IOS platform CLI prompts
 
-    "Aironet"
-        This is currently a synonym for "IOS".
+  "Aironet"
+    This is currently a synonym for "IOS".
 
-    "PIXOS"
-         err_str : regular expression for error messages from the device
-         paging : the command used on Cisco PIXOS to control page length
-         prompt : a regular expression for Cisco PIXOS platform CLI prompts
+  "PIXOS"
+     err_str : regular expression for error messages from the device
+     paging : the command used on Cisco PIXOS to control page length
+     prompt : a regular expression for Cisco PIXOS platform CLI prompts
 
-    "FWSM"
-        This is currently a synonym for "PIXOS".
+  "FWSM"
+    This is currently a synonym for "PIXOS".
 
-    "FWSM3"
-        This is currently a synonym for "PIXOS", apart from...
+  "FWSM3"
+    This is currently a synonym for "PIXOS", apart from...
 
-         paging : the command used on Cisco FWSM running software version
-                  of 3.x or later to control page length
+     paging : the command used on Cisco FWSM running software version
+              of 3.x or later to control page length
 
 CUSTOM PHRASEBOOKS
     Phrasebooks must be written in YAML, with each dictionary being named

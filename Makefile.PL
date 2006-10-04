@@ -16,7 +16,7 @@ WriteMakefile(
         'Class::Data::Inheritable' => 0,
         'Data::Dumper' => 2.121,
     },
-    LICENSE             => 'GPL',
+    LICENSE             => 'GPLv2',
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Net-Appliance-Session-*' },
 );
