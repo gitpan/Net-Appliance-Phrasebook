@@ -2,7 +2,7 @@ NAME
     Net::Appliance::Phrasebook - Network appliance command-line phrasebook
 
 VERSION
-    This document refers to version 0.06 of "Net::Appliance::Phrasebook".
+    This document refers to version 0.07 of Net::Appliance::Phrasebook.
 
 SYNOPSIS
      use Net::Appliance::Phrasebook;
@@ -19,8 +19,8 @@ DESCRIPTION
     command-line interfaces of networked appliances, then you might find
     this module useful.
 
-    "Net::Appliance::Phrasebook" is a simple module that contains a number
-    of dictionaries for the command-line interfaces of some popular network
+    Net::Appliance::Phrasebook is a simple module that contains a number of
+    dictionaries for the command-line interfaces of some popular network
     appliances.
 
     It also supports the use of custom phrasebooks, and of hiearchies of
@@ -35,17 +35,18 @@ TERMINOLOGY
 
 METHODS
   "new"
-    This method accepts a list of named arguments (associative array).
+    This method accepts a list of named arguments (as a hash).
 
     There is one required named argument, which is the class of device whose
     dictionary you wish to access. The named argument is called "platform".
 
     One further, optional argument to "new" is the filename of a phrasebook.
-    If this is not provided, "Net::Appliance::Phrasebook" will use its own
+    If this is not provided, Net::Appliance::Phrasebook will use its own
     internal phrasebook (see "SUPPORTED SYSTEMS"). This named argument is
     called "source".
 
-    The "new" constructor returns a query object, or "undef" on failure.
+    The "new" constructor returns a Data::Phrasebook query object, or
+    "undef" on failure.
 
   "load"
     This is an alias for the "new()" constructor should you prefer to use
@@ -62,37 +63,20 @@ SUPPORTED SYSTEMS
     There is a hierarchy of platforms, so any entry in a given "lineage"
     will use itself and its "ancestors", in order, for lookups:
 
-     ['FWSM3', 'FWSM', 'PIXOS']
-     ['Aironet', 'IOS']
+     ['FWSM3', 'FWSM', 'PIXOS', 'Cisco']
+     ['Aironet', 'IOS', 'Cisco']
+     ['CATOS', 'Cisco']
 
     For example the value "FWSM" (for Cisco Firewall Services Modules with
     software versions up to 2.x) will fetch commands from the "FWSM"
-    dictionary and then the "PIXOS" dictionary, before failing.
+    dictionary and then the "PIXOS" dictionary, then the "Cisco" dictionary,
+    before failing.
 
-    Below is the list of built-in dictionaries, and of course you are able
-    to supply your own via the "new" object method and an external file.
-
-  "IOS"
-     err_str : regular expression for error messages from the device
-     paging  : the command used on Cisco IOS to control page length
-     prompt  : a regular expression for Cisco IOS platform CLI prompts
-
-  "Aironet"
-    This is currently a synonym for "IOS".
-
-  "PIXOS"
-     err_str : regular expression for error messages from the device
-     paging : the command used on Cisco PIXOS to control page length
-     prompt : a regular expression for Cisco PIXOS platform CLI prompts
-
-  "FWSM"
-    This is currently a synonym for "PIXOS".
-
-  "FWSM3"
-    This is currently a synonym for "PIXOS", apart from...
-
-     paging : the command used on Cisco FWSM running software version
-              of 3.x or later to control page length
+    Rather than repeat myself here, if you want to see what dictionaries are
+    built into the module, and what phrases they each contain, then look at
+    this module's source code. If you are reading this on-line, there may be
+    a "Source" hyperlink at the top of the page; click it then scroll to the
+    bottom of the next page and you will see the built-in dictionaries.
 
 CUSTOM PHRASEBOOKS
     Phrasebooks must be written in YAML, with each dictionary being named
@@ -117,6 +101,20 @@ CUSTOM PHRASEBOOKS
     dictionaries to find entries in, in order. Note that the array reference
     option for the "platform" argument will only work when used with a named
     external source data file.
+
+TIPS
+    One way to quickly modify the built-in phrasebook, is to copy everthing
+    below the "__DATA__" line in the source code into a new file, then make
+    changes, then use that file in the "source" named parameter. Make sure
+    you pass the "platform" parameter a value too, in that case.
+
+    Read the manual pages for Data::Phrasebook::Loader::YAML and
+    Data::Phrasebook to understand what a *default dictionary* is, and why
+    you probably always want to have (an empty) one in a phrasebook.
+
+    In YAML, an empty associative array is represented by "{}". Be sure to
+    put that into your cutom dictionaries where needed, otherwise
+    Data::Phrasebook::Loader::YAML will misbehave.
 
 DIAGNOSTICS
     "missing argument to Net::Appliance::Phrasebook::new"

@@ -4,7 +4,7 @@ use strict;
 use warnings FATAL => qw(all);
 
 use base qw(Class::Data::Inheritable);
-our $VERSION = 0.06;
+our $VERSION = 0.07;
 
 use Data::Phrasebook;
 use List::Util qw(first);
@@ -14,8 +14,9 @@ use Carp;
 
 __PACKAGE__->mk_classdata('__data_position');
 __PACKAGE__->mk_classdata('__families' => [
-    ['FWSM3', 'FWSM', 'PIXOS'],
-    ['Aironet', 'IOS'],
+    ['FWSM3', 'FWSM', 'PIXOS', 'Cisco'],
+    ['Aironet', 'IOS', 'Cisco'],
+    ['CATOS', 'Cisco'],
 ]);
 
 sub new {
@@ -72,6 +73,7 @@ sub new {
         dict   => $dict,
     );
     $self->delimiters(qr{^!}); # it objects to colons
+    $self->data('0 but true'); # force load on Phrasebook (a bug in D::P)
 
     return $self;
 }
@@ -86,7 +88,7 @@ Net::Appliance::Phrasebook - Network appliance command-line phrasebook
 
 =head1 VERSION
 
-This document refers to version 0.06 of C<Net::Appliance::Phrasebook>.
+This document refers to version 0.07 of Net::Appliance::Phrasebook.
 
 =head1 SYNOPSIS
 
@@ -104,7 +106,7 @@ This document refers to version 0.06 of C<Net::Appliance::Phrasebook>.
 If you use Perl to manage interactive sessions with with the command-line
 interfaces of networked appliances, then you might find this module useful.
 
-C<Net::Appliance::Phrasebook> is a simple module that contains a number of
+Net::Appliance::Phrasebook is a simple module that contains a number of
 dictionaries for the command-line interfaces of some popular network
 appliances.
 
@@ -123,17 +125,18 @@ the remote management of network appliances.
 
 =head2 C<new>
 
-This method accepts a list of named arguments (associative array).
+This method accepts a list of named arguments (as a hash).
 
 There is one required named argument, which is the class of device whose
 dictionary you wish to access. The named argument is called C<platform>.
 
 One further, optional argument to C<new> is the filename of a phrasebook. If
-this is not provided, C<Net::Appliance::Phrasebook> will use its own internal
+this is not provided, Net::Appliance::Phrasebook will use its own internal
 phrasebook (see L</"SUPPORTED SYSTEMS">). This named argument is called
 C<source>.
 
-The C<new> constructor returns a query object, or C<undef> on failure.
+The C<new> constructor returns a L<Data::Phrasebook> query object, or C<undef>
+on failure.
 
 =head2 C<load>
 
@@ -143,8 +146,8 @@ This is an alias for the C<new()> constructor should you prefer to use it.
 
 Pass this method a single keyword, and it will return the corresponding value
 from the dictionary. It will die on lookup failure, because that's what
-L<Data::Phrasebook> does when there is no successful hit for the given keyword
-in available dictionaries.
+Data::Phrasebook does when there is no successful hit for the given keyword in
+available dictionaries.
 
 =head1 SUPPORTED SYSTEMS
 
@@ -152,42 +155,20 @@ You can select the I<platform> that most closely reflects your device. There
 is a hierarchy of platforms, so any entry in a given "lineage" will use itself
 and its "ancestors", in order, for lookups:
 
- ['FWSM3', 'FWSM', 'PIXOS']
- ['Aironet', 'IOS']
+ ['FWSM3', 'FWSM', 'PIXOS', 'Cisco']
+ ['Aironet', 'IOS', 'Cisco']
+ ['CATOS', 'Cisco']
 
 For example the value C<FWSM> (for Cisco Firewall Services Modules with
 software versions up to 2.x) will fetch commands from the C<FWSM> dictionary
-and then the C<PIXOS> dictionary, before failing.
+and then the C<PIXOS> dictionary, then the C<Cisco> dictionary, before
+failing.
 
-Below is the list of built-in dictionaries, and of course you are able to
-supply your own via the C<new> object method and an external file.
-
-=head2 C<IOS>
-
- err_str : regular expression for error messages from the device
- paging  : the command used on Cisco IOS to control page length
- prompt  : a regular expression for Cisco IOS platform CLI prompts
-
-=head2 C<Aironet>
-
-This is currently a synonym for C<IOS>.
-
-=head2 C<PIXOS>
-
- err_str : regular expression for error messages from the device
- paging : the command used on Cisco PIXOS to control page length
- prompt : a regular expression for Cisco PIXOS platform CLI prompts
-
-=head2 C<FWSM>
-
-This is currently a synonym for C<PIXOS>.
-
-=head2 C<FWSM3>
-
-This is currently a synonym for C<PIXOS>, apart from...
-
- paging : the command used on Cisco FWSM running software version
-          of 3.x or later to control page length
+Rather than repeat myself here, if you want to see what dictionaries are built
+into the module, and what phrases they each contain, then look at this
+module's source code. If you are reading this on-line, there may be a
+C<Source> hyperlink at the top of the page; click it then scroll to the bottom
+of the next page and you will see the built-in dictionaries.
 
 =head1 CUSTOM PHRASEBOOKS
 
@@ -208,10 +189,25 @@ see that the bundled phrasebook makes uses of such platform families to avoid
 repetition.
 
 It is recommended that when creating new phrasebooks you follow this pattern.
-When doing so you B<must> pass an array reference to the C<platform> argument of
-C<new> and it will be used as a list of dictionaries to find entries in, in
+When doing so you B<must> pass an array reference to the C<platform> argument
+of C<new> and it will be used as a list of dictionaries to find entries in, in
 order. Note that the array reference option for the C<platform> argument will
 only work when used with a named external source data file.
+
+=head1 TIPS
+
+One way to quickly modify the built-in phrasebook, is to copy everthing below
+the C<__DATA__> line in the source code into a new file, then make changes,
+then use that file in the C<source> named parameter. Make sure you pass the
+C<platform> parameter a value too, in that case.
+
+Read the manual pages for L<Data::Phrasebook::Loader::YAML> and
+L<Data::Phrasebook> to understand what a I<default dictionary> is, and why you
+probably always want to have (an empty) one in a phrasebook.
+
+In YAML, an empty associative array is represented by C<{}>. Be sure to put
+that into your cutom dictionaries where needed, otherwise
+Data::Phrasebook::Loader::YAML will misbehave.
 
 =head1 DIAGNOSTICS
 
@@ -292,24 +288,39 @@ St, Fifth Floor, Boston, MA 02110-1301 USA
 =cut
 
 __DATA__
----
-# do NOT remove the empty default dictionary.
-0000default :
+0000default : {}
+
+Cisco :
+    prompt            : '/[\/a-zA-Z0-9._-]+ ?(?:\(config[^)]*\))? ?[#>] ?$/'
+    basic_prompt      : '/> ?$/'
+    privileged_prompt : '/# ?$/'
+    configure_prompt  : '/\(config[^)]*\)# ?$/'
+    user_prompt      : '/[Uu]sername/'
+    pass_prompt      : '/[Pp]assword: ?$/'
+    userpass_prompt  : '/(?:[Uu]sername|[Pp]assword): ?$/'
+    begin_privileged_cmd           : 'enable'
+    begin_privileged_with_user_cmd : 'login'
+    end_privileged_cmd             : 'disable'
+    begin_configure_cmd            : 'configure terminal'
+    end_configure_cmd              : 'exit'
+
+# the CATOS dictionary is untested by the module author. feedback appreciated.
+CATOS :
+    err_string : '/% (?:Type "[^?]+\?"|(?:Incomplete|Unknown) command|Invalid input)/'
+    paging_cmd : 'set term'
 
 IOS :
-    err_str : '% (?:Type "[^?]+\?"|(?:Incomplete|Unknown) command|Invalid input)'
-    paging  : 'terminal length'
-    prompt  : '/[\/a-zA-Z0-9.-]+ ?(?:\(config[^)]*\))? ?[#>]/'
+    err_string : '/% (?:Type "[^?]+\?"|(?:Incomplete|Unknown) command|Invalid input)/'
+    paging_cmd : 'terminal length'
 
-Aironet :
+Aironet : {}
 
 PIXOS :
-    err_str : '(?:Type help|(?:ERROR|Usage):)'
-    paging  : 'pager lines'
-    prompt  : '/[\/a-zA-Z0-9.-]+ ?(?:\(config[^)]*\))? ?[#>]/'
+    err_string : '/(?:Type help|(?:ERROR|Usage|usage):|not allowed)/'
+    paging_cmd : 'pager lines'
 
-FWSM :
+FWSM : {}
 
 FWSM3 :
-    paging  : 'terminal pager lines'
+    paging_cmd : 'terminal pager lines'
 
