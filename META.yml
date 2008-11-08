@@ -1,16 +1,31 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Net-Appliance-Phrasebook
-version:      1.6
-version_from: lib/Net/Appliance/Phrasebook.pm
-installdirs:  site
-requires:
-    Class::Data::Inheritable:      0
-    Data::Dumper:                  2.121
-    Data::Phrasebook:              0.26
-    Data::Phrasebook::Loader::YAML: 0.06
-    List::MoreUtils:               0
-    YAML:                          0.62
-
+---
+abstract: 'Network appliance command-line phrasebook'
+author:
+  - 'Oliver Gorwits C<< <oliver.gorwits@oucs.ox.ac.uk> >>'
+build_requires:
+  Test::More: 0
+  Test::Pod: 0
+  Test::Pod::Coverage: 0
 distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.30_01
+generated_by: 'Module::Install version 0.77'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Net-Appliance-Phrasebook
+no_index:
+  directory:
+    - inc
+    - t
+    - examples
+requires:
+  Class::Data::Inheritable: 0
+  Data::Dumper: 2.121
+  Data::Phrasebook: 0
+  Data::Phrasebook::Loader::YAML: 0
+  List::MoreUtils: 0
+  YAML: 0
+  perl: 5.8.1
+resources:
+  license: http://dev.perl.org/licenses/
+version: 1.7
