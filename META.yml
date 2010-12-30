@@ -1,31 +1,29 @@
 ---
 abstract: 'Network appliance command-line phrasebook'
 author:
-  - 'Oliver Gorwits C<< <oliver.gorwits@oucs.ox.ac.uk> >>'
+  - 'Oliver Gorwits <oliver@cpan.org>'
 build_requires:
   Test::More: 0
-  Test::Pod: 0
-  Test::Pod::Coverage: 0
-distribution_type: module
-generated_by: 'Module::Install version 0.76'
+configure_requires:
+  ExtUtils::MakeMaker: 6.31
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 4.200000, CPAN::Meta::Converter version 2.102400'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Net-Appliance-Phrasebook
-no_index:
-  directory:
-    - inc
-    - t
-    - examples
 requires:
+  Carp: 0
   Class::Data::Inheritable: 0
-  Data::Dumper: 2.121
   Data::Phrasebook: 0
   Data::Phrasebook::Loader::YAML: 0
+  File::Basename: 0
   List::MoreUtils: 0
-  YAML: 0
-  perl: 5.8.1
+  List::Util: 0
+  Symbol: 0
 resources:
-  license: http://dev.perl.org/licenses/
-version: 1.8
+  bugtracker: https://rt.cpan.org/Public/Dist/Display.html?Name=Net-Appliance-Phrasebook
+  homepage: https://github.com/ollyg/Net-Appliance-Phrasebook/wiki
+  repository: git://github.com/ollyg/Net-Appliance-Phrasebook.git
+version: 2.103641

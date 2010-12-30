@@ -1,12 +1,12 @@
 package Net::Appliance::Phrasebook;
+BEGIN {
+  $Net::Appliance::Phrasebook::VERSION = '2.103641';
+}
 
 use strict;
 use warnings FATAL => qw(all);
 
 use base qw(Class::Data::Inheritable);
-
-our $VERSION = '1.8';
-$VERSION = eval $VERSION; # numify for warning-free dev releases
 
 use Data::Phrasebook;
 use List::Util qw(first);
@@ -24,6 +24,7 @@ __PACKAGE__->mk_classdata('__families' => [
     ['JUNOS', 'Cisco'],
     ['HP', 'Cisco'],
     ['Nortel', 'Cisco'],
+    ['ExtremeXOS', 'Cisco'],
 ]);
 
 sub new {
@@ -80,13 +81,19 @@ sub new {
 
 1;
 
+# ABSTRACT: Network appliance command-line phrasebook
+
+
+__END__
+=pod
+
 =head1 NAME
 
 Net::Appliance::Phrasebook - Network appliance command-line phrasebook
 
 =head1 VERSION
 
-This document refers to version 1.8 of Net::Appliance::Phrasebook.
+version 2.103641
 
 =head1 SYNOPSIS
 
@@ -155,18 +162,17 @@ and its "ancestors", in order, for lookups:
 
  ['FWSM3', 'FWSM', 'PIXOS', 'Cisco']
  ['Aironet', 'IOS', 'Cisco']
+ ['PIXOS7', 'Cisco']
  ['CATOS', 'Cisco']
+ ['JUNOS', 'Cisco']
+ ['HP', 'Cisco']
+ ['Nortel', 'Cisco']
+ ['ExtremeXOS', 'Cisco']
 
 For example the value C<FWSM> (for Cisco Firewall Services Modules with
 software versions up to 2.x) will fetch commands from the C<FWSM> dictionary
 and then the C<PIXOS> dictionary, then the C<Cisco> dictionary, before
 failing.
-
-Rather than repeat myself here, if you want to see what dictionaries are built
-into the module, and what phrases they each contain, then look at this
-module's source code. If you are reading this on-line, there may be a
-C<Source> hyperlink at the top of the page; click it then scroll to the bottom
-of the next page and you will see the built-in dictionaries.
 
 =head1 CUSTOM PHRASEBOOKS
 
@@ -283,13 +289,14 @@ L<Data::Phrasebook::Loader::YAML>
 
 =head1 AUTHOR
 
-Oliver Gorwits C<< <oliver.gorwits@oucs.ox.ac.uk> >>
+Oliver Gorwits <oliver@cpan.org>
 
-=head1 COPYRIGHT & LICENSE
+=head1 COPYRIGHT AND LICENSE
 
-Copyright (c) The University of Oxford 2008.
+This software is copyright (c) 2010 by University of Oxford.
 
-This library is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself.
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
+
